@@ -1570,27 +1570,15 @@ var calc = function calc() {
       personsSum = 0,
       daysSum = 0,
       total = 0;
-  totalValue.innerHTML = 0; //persons
-
-  persons.addEventListener('input', function (event) {
+  totalValue.innerHTML = 0;
+  document.body.addEventListener('input', function (event) {
+    var target = event.target;
     event.target.value = event.target.value.replace(/[e\+]/g, '').replace(/[^0-9]/g, '').replace(/^0/, '');
-    personsSum = +event.target.value;
     total = (daysSum + personsSum) * 4000;
+    if (target == persons) personsSum = +event.target.value;
+    if (target == restDays) daysSum = +event.target.value;
 
-    if (restDays.value == '' || restDays.value == 0 || personsSum == 0) {
-      totalValue.innerHTML = 0;
-    } else {
-      totalValue.innerHTML = total;
-      animateValue(totalValue, 0, total, 7000);
-    }
-  }); //days
-
-  restDays.addEventListener('input', function (event) {
-    event.target.value = event.target.value.replace(/[e\+]/g, '').replace(/[^0-9]/g, '').replace(/^0/, '');
-    daysSum = +event.target.value;
-    total = (daysSum + personsSum) * 4000;
-
-    if (persons.value == '' || persons.value == 0 || daysSum == 0) {
+    if (restDays.value == '' || restDays.value == 0 || personsSum == 0 || persons.value == '' || persons.value == 0 || daysSum == 0) {
       totalValue.innerHTML = 0;
     } else {
       totalValue.innerHTML = total;
