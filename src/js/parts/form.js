@@ -70,17 +70,17 @@ function form() {
                         //statusMessage.innerHTML = message.loading;
                         form.style.display = 'none';
                         img.style.display = "block";
-                        img.src = "/icons/ajax-loader.gif";
+                        img.src = "/src/icons/ajax-loader.gif";
                         img.style.margin = "30px 200px 0";
                     })
                     .then(() => {
                         //statusMessage.innerHTML = message.success;                      
-                        img.src = "/icons/herbal.png";
+                        img.src = "/src/icons/herbal.png";
                         img.style.width = "150px";
                     })
                     .catch(() => {
                         //statusMessage.innerHTML = message.failure;
-                        img.src = "/icons/fish.psd";
+                        img.src = "/src/icons/fish.psd";
                         img.style.width = "150px";
                     })
                     .then(clearInput)
