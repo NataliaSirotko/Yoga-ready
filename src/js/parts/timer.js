@@ -1,7 +1,7 @@
-function timer() {
+const timer = () => {
     let deadline = '2019-05-25';
 
-    function getTimeRemaining(endtime) {
+    const getTimeRemaining = (endtime) => {
         let t = Date.parse(endtime) - Date.parse(new Date()),
             seconds = Math.floor((t/1000) % 60),
             minutes = Math.floor((t/1000/60)%60),
@@ -15,17 +15,11 @@ function timer() {
             'minutes' : minutes,
             'seconds' : seconds
         };
-    }
+    };
 
-    function setClock(id, endtime) {
-        let timer = document.getElementById(id),
-            days = timer.querySelector('.days'),
-            hours = timer.querySelector('.hours'),
-            minutes = timer.querySelector('.minutes'),
-            seconds = timer.querySelector('.seconds'),
-            timeInterval = setInterval(updateClock, 1000);
-
-        function updateClock() {
+    const setClock = (id, endtime) => {
+        
+        const updateClock = () => {
             let t = getTimeRemaining(endtime);
 
             if (t.total <= 0) {
@@ -40,17 +34,26 @@ function timer() {
                 minutes.textContent = addZero(t.minutes);
                 seconds.textContent = addZero(t.seconds);
             }
-        }
+        };
 
-        function addZero(num) {
+        let timer = document.getElementById(id),
+            days = timer.querySelector('.days'),
+            hours = timer.querySelector('.hours'),
+            minutes = timer.querySelector('.minutes'),
+            seconds = timer.querySelector('.seconds'),
+            timeInterval = setInterval(updateClock, 1000);
+
+       
+
+        const addZero = (num) => {
             if (num>=0 && num <10) {
                 return '0' + num;
             } else {
                 return num;
             }
-        }
+        };
 
-        function text(num) {
+        const text = (num) => {
             let count = num % 10;
             if (count == 1) {
                 return num + ' день';
@@ -59,10 +62,10 @@ function timer() {
             } else {
                 return num + ' дней';
             }
-        }
-    }
+        };
+    };
 
     setClock('timer', deadline);
-}
+};
 
 module.exports = timer;

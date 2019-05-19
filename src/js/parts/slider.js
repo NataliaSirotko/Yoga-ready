@@ -1,21 +1,19 @@
-function slider() {
+const slider = () => {
     let slideIndex = 1,
         slides = document.querySelectorAll('.slider-item'),
         prev = document.querySelector('.prev'),
         next = document.querySelector('.next'),
         dotsWrap = document.querySelector('.slider-dots'),
         dots = document.querySelectorAll('.dot');
-
-        showSlides(slideIndex);
     
-        function showSlides(n) {
+    const showSlides = (n) => {
 
         if (n > slides.length) {
             slideIndex = 1;
         }
         if (n < 1) {
             slideIndex = slides.length;
-        }
+        }    
 
         slides.forEach(item => item.style.display = 'none');
         dots.forEach(item => item.classList.remove('dot-active'));
@@ -23,25 +21,25 @@ function slider() {
         slides[slideIndex - 1].style.display = 'block';
         slides[slideIndex - 1].classList.remove('fade');
         slides[slideIndex - 1].animate([
-            {width: '30%',
-            transform: 'rotate(360deg)'},
+            {width: '50%'},
             {offset: 0.6, 
-            width: '100%',
-            transform: 'rotate(0deg)'},           
-            {width: '80%',
-            transform: 'rotate(0deg)'}
+            width: '100%'},           
+            {width: '80%'}
         ],
-            {duration: 2500});
+            {duration: 2000});
 
         dots[slideIndex - 1].classList.add('dot-active');
-    }
+    };
 
-    function plusSlides(n) {
+    showSlides(slideIndex);
+
+    const plusSlides = (n) => {
         showSlides(slideIndex += n);
-    }
-    function currentSlide(n) {
+    };
+
+    const currentSlide = (n) => {
         showSlides(slideIndex = n);
-    }
+    };
 
     prev.addEventListener('click', () => {
         plusSlides(-1);
@@ -58,6 +56,6 @@ function slider() {
             }
         }
     });
-}
+};
 
 module.exports = slider;

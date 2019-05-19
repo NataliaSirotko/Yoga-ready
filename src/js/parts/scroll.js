@@ -1,4 +1,4 @@
-function scroll() {
+const scroll = () => {
     let anchors = document.querySelectorAll('a[href*="#"]');
 
     for (let item of anchors) {
@@ -13,6 +13,6 @@ function scroll() {
             });
         });
     }
-}
+};
 
 module.exports = scroll;

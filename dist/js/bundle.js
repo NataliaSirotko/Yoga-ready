@@ -1562,7 +1562,7 @@ module.exports = g;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-function calc() {
+var calc = function calc() {
   var persons = document.querySelectorAll('.counter-block-input')[0],
       restDays = document.querySelectorAll('.counter-block-input')[1],
       place = document.getElementById('select'),
@@ -1572,9 +1572,9 @@ function calc() {
       total = 0;
   totalValue.innerHTML = 0; //persons
 
-  persons.addEventListener('input', function () {
-    this.value = this.value.replace(/[e\+]/g, '').replace(/[^0-9]/g, '').replace(/^0/, '');
-    personsSum = +this.value;
+  persons.addEventListener('input', function (event) {
+    event.target.value = event.target.value.replace(/[e\+]/g, '').replace(/[^0-9]/g, '').replace(/^0/, '');
+    personsSum = +event.target.value;
     total = (daysSum + personsSum) * 4000;
 
     if (restDays.value == '' || restDays.value == 0 || personsSum == 0) {
@@ -1585,9 +1585,9 @@ function calc() {
     }
   }); //days
 
-  restDays.addEventListener('input', function () {
-    this.value = this.value.replace(/[e\+]/g, '').replace(/[^0-9]/g, '').replace(/^0/, '');
-    daysSum = +this.value;
+  restDays.addEventListener('input', function (event) {
+    event.target.value = event.target.value.replace(/[e\+]/g, '').replace(/[^0-9]/g, '').replace(/^0/, '');
+    daysSum = +event.target.value;
     total = (daysSum + personsSum) * 4000;
 
     if (persons.value == '' || persons.value == 0 || daysSum == 0) {
@@ -1598,21 +1598,21 @@ function calc() {
     }
   }); //choose place
 
-  place.addEventListener('change', function () {
+  place.addEventListener('change', function (event) {
     if (restDays.value == '' || persons.value == '' || daysSum == 0 || personsSum == 0) {
       totalValue.innerHTML = 0;
     } else {
       var a = total;
-      totalValue.innerHTML = a * this.options[this.selectedIndex].value;
+      totalValue.innerHTML = a * event.target.options[event.target.selectedIndex].value;
       animateValue(totalValue, 0, totalValue.innerHTML, 7000);
     }
   }); // animation counter
 
-  function animateValue(name, start, end, duration) {
-    var range = start - end;
-    var current = start;
-    var step = end > start ? 100 : -100;
-    var stepTime = Math.abs(Math.floor(duration / range));
+  var animateValue = function animateValue(name, start, end, duration) {
+    var range = start - end,
+        current = start,
+        step = end > start ? 100 : -100,
+        stepTime = Math.abs(Math.floor(duration / range));
     var timer = setInterval(function () {
       current += step;
       name.innerHTML = current;
@@ -1621,8 +1621,8 @@ function calc() {
         clearInterval(timer);
       }
     }, stepTime);
-  }
-}
+  };
+};
 
 module.exports = calc;
 
@@ -1637,26 +1637,18 @@ module.exports = calc;
 
 var _Promise = typeof Promise === 'undefined' ? __webpack_require__(/*! es6-promise */ "./node_modules/es6-promise/dist/es6-promise.js").Promise : Promise;
 
-function form() {
-  function sendForm(form, popup) {
-    var message = {
-      loading: 'Загружается..',
-      success: 'Спасибо, скоро мы с вами свяжемся',
-      failure: 'Что-то пошло не так...'
-    };
-    var input = form.getElementsByTagName('input'),
-        statusMessage = document.createElement('div');
-    statusMessage.classList.add('status');
+var form = function form() {
+  var sendForm = function sendForm(form, popup) {
+    var input = form.getElementsByTagName('input');
     var inputTel = form.querySelector('[type="tel"]');
     inputTel.addEventListener('keyup', function () {
-      var re = /(\+{0,1}\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/;
-      var elem = inputTel.value.replace(/[^0-9\+]/g, '').match(re);
+      var re = /(\+{0,1}\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/,
+          elem = inputTel.value.replace(/[^0-9\+]/g, '').match(re);
       inputTel.value = !elem[2] ? elem[1] : elem[1] + ' (' + elem[2] + (elem[3] ? ') ' + elem[3] : '') + (elem[4] ? '-' + elem[4] : '') + (elem[5] ? '-' + elem[5] : '');
     });
     var img = document.createElement('img');
     form.addEventListener('submit', function (event) {
       event.preventDefault();
-      form.appendChild(statusMessage);
       popup.appendChild(img);
       var formData = new FormData(form);
       var obj = {};
@@ -1665,7 +1657,7 @@ function form() {
       });
       var json = JSON.stringify(obj);
 
-      function postData(data) {
+      var postData = function postData(data) {
         return new _Promise(function (resolve, reject) {
           var request = new XMLHttpRequest();
           request.open('POST', 'server.php');
@@ -1681,50 +1673,43 @@ function form() {
           });
           request.send(data);
         });
-      } // end postData
+      }; // end postData
 
 
-      function clearInput() {
+      var clearInput = function clearInput() {
         for (var i = 0; i < input.length; i++) {
           input[i].value = '';
         }
-      }
+      };
 
       postData(json).then(function () {
-        //statusMessage.innerHTML = message.loading;
         form.style.display = 'none';
         img.style.display = "block";
         img.src = "/src/icons/ajax-loader.gif";
         img.style.margin = "30px 200px 0";
       }).then(function () {
-        //statusMessage.innerHTML = message.success;                      
         img.src = "/src/icons/herbal.png";
         img.style.width = "150px";
       }).catch(function () {
-        //statusMessage.innerHTML = message.failure;
         img.src = "/src/icons/fish.psd";
         img.style.width = "150px";
       }).then(clearInput);
-      var more = document.querySelector('.more'),
-          descrBtn = document.querySelectorAll('.description-btn');
-      more.addEventListener('click', function () {
-        form.style.display = 'block';
-        img.style.display = "none"; //form.removeChild(statusMessage);
-      });
-      descrBtn.forEach(function (item) {
-        item.addEventListener('click', function () {
+      document.body.addEventListener('click', function (event) {
+        var target = event.target;
+
+        if (target.classList.contains('more') || target.classList.contains('description-btn')) {
           form.style.display = 'block';
-          img.style.display = "none"; //form.removeChild(statusMessage);
-        });
+          img.style.display = "none";
+        }
       });
     });
-  }
+  };
 
-  var form = document.getElementsByTagName('form');
-  var popup = document.querySelectorAll('div[class$="-form"]');
+  var form = document.getElementsByTagName('form'),
+      popup = document.querySelectorAll('div[class$="-form"]');
   sendForm(form[1], popup[1]);
   sendForm(form[0], popup[0]);
-}
+};
 
 module.exports = form;
 
@@ -1737,82 +1722,60 @@ module.exports = form;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-function modal() {
-  function getModal() {
-    var more = document.querySelector('.more'),
-        overlay = document.querySelector('.overlay'),
-        close = document.querySelector('.popup-close'),
-        popup = document.querySelector('.popup');
-    more.addEventListener('click', function (e) {
-      overlay.style.display = 'block';
-      e.target.classList.add('more-splash');
-      document.body.style.overflow = 'hidden';
-    });
-    close.addEventListener('click', function () {
-      overlay.style.display = 'none';
-      more.classList.remove('more-splash');
-      document.body.style.overflow = '';
-    });
-    var descriptionBtns = document.querySelectorAll('.description-btn');
-    descriptionBtns.forEach(function (item) {
-      item.addEventListener('click', function () {
-        overlay.style.display = 'block';
-        item.classList.add('more-splash');
-        document.body.style.overflow = 'hidden';
-      });
-      close.addEventListener('click', function () {
-        item.classList.remove('more-splash');
-      });
+var modal = function modal() {
+  var getModal = function getModal() {
+    var overlay = document.querySelector('.overlay'),
+        popup = document.querySelector('.popup'),
+        isActiveBtn;
+
+    var bindModal = function bindModal(overlayStatus, overflowStatus, classListMethod, elem) {
+      if (classListMethod == 'add') isActiveBtn = elem;
+      if (!elem) elem = isActiveBtn;
+      overlay.style.display = overlayStatus;
+      elem.classList[classListMethod]('more-splash');
+      document.body.style.overflow = overflowStatus;
+    };
+
+    document.body.addEventListener('click', function (event) {
+      var target = event.target;
+      if (target.classList.contains('more') || target.classList.contains('description-btn')) bindModal('block', 'hidden', 'add', target);
+      if (target.classList.contains('popup-close')) bindModal('none', '', 'remove');
     });
     var isIe = /InternetExplorer/.test(navigator.userAgent),
         edge = /Edge/.test(navigator.userAgent);
+
+    var getAnimate = function getAnimate() {
+      overlay.classList.remove('fade');
+      overlay.animate([{
+        width: '0'
+      }, {
+        width: '100%'
+      }], {
+        duration: 2500
+      });
+      popup.animate([{
+        left: '0'
+      }, {
+        left: '50%'
+      }], {
+        duration: 1500
+      });
+    };
 
     if (window.screen.width < 500) {
       overlay.classList.remove('fade');
     } else {
       if (!(isIe || edge)) {
-        more.addEventListener('click', function () {
-          overlay.classList.remove('fade');
-          overlay.animate([{
-            width: '0'
-          }, {
-            width: '100%'
-          }], {
-            duration: 2500
-          });
-          popup.animate([{
-            left: '0'
-          }, {
-            left: '50%'
-          }], {
-            duration: 1500
-          });
-        });
-        descriptionBtns.forEach(function (item) {
-          item.addEventListener('click', function () {
-            overlay.classList.remove('fade');
-            overlay.animate([{
-              width: '0'
-            }, {
-              width: '100%'
-            }], {
-              duration: 2500
-            });
-            popup.animate([{
-              left: '0'
-            }, {
-              left: '50%'
-            }], {
-              duration: 1500
-            });
-          });
+        document.body.addEventListener('click', function (event) {
+          var target = event.target;
+          if (target.classList.contains('more') || target.classList.contains('description-btn')) getAnimate();
         });
       }
     }
-  }
+  };
 
   getModal();
-}
+};
 
 module.exports = modal;
 
@@ -1825,7 +1788,7 @@ module.exports = modal;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-function scroll() {
+var scroll = function scroll() {
   var anchors = document.querySelectorAll('a[href*="#"]');
   var _iteratorNormalCompletion = true;
   var _didIteratorError = false;
@@ -1861,7 +1824,7 @@ function scroll() {
       }
     }
   }
-}
+};
 
 module.exports = scroll;
 
@@ -1874,16 +1837,15 @@ module.exports = scroll;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-function slider() {
+var slider = function slider() {
   var slideIndex = 1,
       slides = document.querySelectorAll('.slider-item'),
       prev = document.querySelector('.prev'),
       next = document.querySelector('.next'),
       dotsWrap = document.querySelector('.slider-dots'),
       dots = document.querySelectorAll('.dot');
-  showSlides(slideIndex);
 
-  function showSlides(n) {
+  var showSlides = function showSlides(n) {
     if (n > slides.length) {
       slideIndex = 1;
     }
@@ -1901,28 +1863,27 @@ function slider() {
     slides[slideIndex - 1].style.display = 'block';
     slides[slideIndex - 1].classList.remove('fade');
     slides[slideIndex - 1].animate([{
-      width: '30%',
-      transform: 'rotate(360deg)'
+      width: '50%'
     }, {
       offset: 0.6,
-      width: '100%',
-      transform: 'rotate(0deg)'
+      width: '100%'
     }, {
-      width: '80%',
-      transform: 'rotate(0deg)'
+      width: '80%'
     }], {
-      duration: 2500
+      duration: 2000
     });
     dots[slideIndex - 1].classList.add('dot-active');
-  }
+  };
 
-  function plusSlides(n) {
+  showSlides(slideIndex);
+
+  var plusSlides = function plusSlides(n) {
     showSlides(slideIndex += n);
-  }
+  };
 
-  function currentSlide(n) {
+  var currentSlide = function currentSlide(n) {
     showSlides(slideIndex = n);
-  }
+  };
 
   prev.addEventListener('click', function () {
     plusSlides(-1);
@@ -1937,7 +1898,7 @@ function slider() {
       }
     }
   });
-}
+};
 
 module.exports = slider;
 
@@ -1950,26 +1911,26 @@ module.exports = slider;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-function tabs() {
+var tabs = function tabs() {
   var tab = document.querySelectorAll('.info-header-tab'),
       info = document.querySelector('.info-header'),
       tabContent = document.querySelectorAll('.info-tabcontent');
 
-  function hideTabContent(a) {
+  var hideTabContent = function hideTabContent(a) {
     for (var i = a; i < tabContent.length; i++) {
       tabContent[i].classList.remove('show');
       tabContent[i].classList.add('hide');
     }
-  }
+  };
 
   hideTabContent(1);
 
-  function showTabContent(b) {
+  var showTabContent = function showTabContent(b) {
     if (tabContent[b].classList.contains('hide')) {
       tabContent[b].classList.remove('hide');
       tabContent[b].classList.add('show');
     }
-  }
+  };
 
   info.addEventListener('click', function (event) {
     var target = event.target;
@@ -1984,7 +1945,7 @@ function tabs() {
       }
     }
   });
-}
+};
 
 module.exports = tabs;
 
@@ -1997,10 +1958,10 @@ module.exports = tabs;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-function timer() {
+var timer = function timer() {
   var deadline = '2019-05-25';
 
-  function getTimeRemaining(endtime) {
+  var getTimeRemaining = function getTimeRemaining(endtime) {
     var t = Date.parse(endtime) - Date.parse(new Date()),
         seconds = Math.floor(t / 1000 % 60),
         minutes = Math.floor(t / 1000 / 60 % 60),
@@ -2013,17 +1974,10 @@ function timer() {
       'minutes': minutes,
       'seconds': seconds
     };
-  }
+  };
 
-  function setClock(id, endtime) {
-    var timer = document.getElementById(id),
-        days = timer.querySelector('.days'),
-        hours = timer.querySelector('.hours'),
-        minutes = timer.querySelector('.minutes'),
-        seconds = timer.querySelector('.seconds'),
-        timeInterval = setInterval(updateClock, 1000);
-
-    function updateClock() {
+  var setClock = function setClock(id, endtime) {
+    var updateClock = function updateClock() {
       var t = getTimeRemaining(endtime);
 
       if (t.total <= 0) {
@@ -2038,17 +1992,24 @@ function timer() {
         minutes.textContent = addZero(t.minutes);
         seconds.textContent = addZero(t.seconds);
       }
-    }
+    };
 
-    function addZero(num) {
+    var timer = document.getElementById(id),
+        days = timer.querySelector('.days'),
+        hours = timer.querySelector('.hours'),
+        minutes = timer.querySelector('.minutes'),
+        seconds = timer.querySelector('.seconds'),
+        timeInterval = setInterval(updateClock, 1000);
+
+    var addZero = function addZero(num) {
       if (num >= 0 && num < 10) {
         return '0' + num;
       } else {
         return num;
       }
-    }
+    };
 
-    function text(num) {
+    var text = function text(num) {
       var count = num % 10;
 
       if (count == 1) {
@@ -2060,11 +2021,11 @@ function timer() {
       } else {
         return num + ' дней';
       }
-    }
-  }
+    };
+  };
 
   setClock('timer', deadline);
-}
+};
 
 module.exports = timer;
 

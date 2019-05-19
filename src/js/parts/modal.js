@@ -1,76 +1,56 @@
-function modal() {
-    function getModal() {
-        let more = document.querySelector('.more'),
-            overlay = document.querySelector('.overlay'),
-            close = document.querySelector('.popup-close'),
-            popup = document.querySelector('.popup');
+const modal = () => {
 
-        more.addEventListener('click', (e) => {
-            overlay.style.display = 'block';
-            e.target.classList.add('more-splash');
-            document.body.style.overflow = 'hidden';
-        });
-        close.addEventListener('click', () => {
-            overlay.style.display = 'none'; 
-            more.classList.remove('more-splash');
-            document.body.style.overflow = '';
-        });
+    const getModal = () => {
+        let overlay = document.querySelector('.overlay'),
+            popup = document.querySelector('.popup'),
+            isActiveBtn;
 
-        let descriptionBtns = document.querySelectorAll('.description-btn');
+        const bindModal = (overlayStatus, overflowStatus, classListMethod, elem) => {
+            if (classListMethod == 'add') isActiveBtn = elem;
+            if (!elem) elem = isActiveBtn;
+            overlay.style.display = overlayStatus;
+            elem.classList[classListMethod]('more-splash');
+            document.body.style.overflow = overflowStatus;
+        };
 
-        descriptionBtns.forEach(item => {
-            item.addEventListener('click', () => {
-                overlay.style.display = 'block';
-                item.classList.add('more-splash');
-                document.body.style.overflow = 'hidden';
-            });
-            close.addEventListener('click', () => {
-                item.classList.remove('more-splash');
-            });
-        });
+        document.body.addEventListener('click', (event) => {
+            let target = event.target;
+
+            if (target.classList.contains('more') || target.classList.contains('description-btn')) bindModal('block', 'hidden', 'add', target);
+            if (target.classList.contains('popup-close')) bindModal('none', '', 'remove');
+        });    
 
         let isIe = /InternetExplorer/.test(navigator.userAgent),
             edge = /Edge/.test(navigator.userAgent);
+
+        const getAnimate = () => {
+            overlay.classList.remove('fade');
+            overlay.animate([
+                {width: '0'},
+                {width: '100%'}
+            ],
+                {duration: 2500});
+            popup.animate([
+                {left: '0'},
+                {left: '50%'}
+            ],
+                {duration: 1500}); 
+        };
 
         if (window.screen.width < 500) {
             overlay.classList.remove('fade');
         } else {
             if (!(isIe || edge)) {  
-                more.addEventListener('click', () => {                  
-                    overlay.classList.remove('fade');
-                    overlay.animate([
-                        {width: '0'},
-                        {width: '100%'}
-                    ],
-                        {duration: 2500});
-                    popup.animate([
-                        {left: '0'},
-                        {left: '50%'}
-                    ],
-                        {duration: 1500});
-                });
-
-                descriptionBtns.forEach(item => {
-                    item.addEventListener('click', () => {
-                        overlay.classList.remove('fade');
-                        overlay.animate([
-                            {width: '0'},
-                            {width: '100%'}
-                        ],
-                            {duration: 2500});
-                        popup.animate([
-                            {left: '0'},
-                            {left: '50%'}
-                        ],
-                            {duration: 1500});
-                    });
+                document.body.addEventListener('click', (event) => {
+                    let target = event.target;
+                    if (target.classList.contains('more') || target.classList.contains('description-btn'))  getAnimate();
                 });
             }
         } 
 
-    }
+    };
 
     getModal();
-}
+};
 
 module.exports = modal;
