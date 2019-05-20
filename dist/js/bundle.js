@@ -1599,6 +1599,7 @@ var calc = function calc() {
     if (restDays.value == '' || persons.value == '' || daysSum == 0 || personsSum == 0) {
       totalValue.innerHTML = 0;
     } else {
+      total = (daysSum + personsSum) * 4000;
       var a = total;
       totalValue.innerHTML = a * event.target.options[event.target.selectedIndex].value;
       animateValue(totalValue, 0, totalValue.innerHTML, 7000);

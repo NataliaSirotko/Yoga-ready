@@ -39,7 +39,8 @@ const calc = () => {
     place.addEventListener('change', (event) => {
         if (restDays.value == '' || persons.value == '' || daysSum == 0 || personsSum == 0) {
             totalValue.innerHTML = 0;
-            } else {
+        } else {
+            total = (daysSum+personsSum)*4000;
             let a = total;
             totalValue.innerHTML = a * event.target.options[event.target.selectedIndex].value;
             animateValue(totalValue, 0, totalValue.innerHTML, 7000);
