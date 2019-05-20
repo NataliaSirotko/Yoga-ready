@@ -9,23 +9,33 @@ const calc = () => {
         total = 0;
 
     totalValue.innerHTML = 0;
-
-    document.body.addEventListener('input', (event) => {
-        let target = event.target;
-        event.target.value = event.target.value.replace(/[e\+]/g, '').replace(/[^0-9]/g, '').replace(/^0/, '');
+    
+    persons.addEventListener('input', function() {
+        this.value = this.value.replace(/[e\+]/g, '').replace(/[^0-9]/g, '').replace(/^0/, '');
+        personsSum = +this.value;
         total = (daysSum+personsSum)*4000;
 
-        if (target == persons) personsSum = +event.target.value;
-        if (target == restDays) daysSum = +event.target.value;
-        if (restDays.value == '' || restDays.value == 0 || personsSum == 0 || persons.value == '' || persons.value == 0 || daysSum == 0) {
+        if (restDays.value == '' || restDays.value == 0 || personsSum == 0 ) {
             totalValue.innerHTML = 0;
         } else {
             totalValue.innerHTML = total;
             animateValue(totalValue, 0, total, 7000);
-        }       
+        }
     });
 
-    //choose place
+    restDays.addEventListener('input', function() { 
+        this.value = this.value.replace(/[e\+]/g, '').replace(/[^0-9]/g, '').replace(/^0/, '');
+        daysSum = +this.value; 
+        total = (daysSum+personsSum)*4000;
+
+        if (persons.value == '' || persons.value == 0 || daysSum == 0 ) {
+            totalValue.innerHTML = 0;
+        } else {
+            totalValue.innerHTML = total;
+            animateValue(totalValue, 0, total, 7000);
+        }
+    });
+
     place.addEventListener('change', (event) => {
         if (restDays.value == '' || persons.value == '' || daysSum == 0 || personsSum == 0) {
             totalValue.innerHTML = 0;
