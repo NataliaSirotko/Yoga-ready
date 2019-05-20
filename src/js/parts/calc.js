@@ -13,7 +13,7 @@ const calc = () => {
     persons.addEventListener('input', function() {
         this.value = this.value.replace(/[e\+]/g, '').replace(/[^0-9]/g, '').replace(/^0/, '');
         personsSum = +this.value;
-        total = (daysSum+personsSum)*4000;
+        total = (daysSum+personsSum)*4000 * place.options[place.selectedIndex].value;
 
         if (restDays.value == '' || restDays.value == 0 || personsSum == 0 ) {
             totalValue.innerHTML = 0;
@@ -26,7 +26,7 @@ const calc = () => {
     restDays.addEventListener('input', function() { 
         this.value = this.value.replace(/[e\+]/g, '').replace(/[^0-9]/g, '').replace(/^0/, '');
         daysSum = +this.value; 
-        total = (daysSum+personsSum)*4000;
+        total = (daysSum+personsSum)*4000 * place.options[place.selectedIndex].value;
 
         if (persons.value == '' || persons.value == 0 || daysSum == 0 ) {
             totalValue.innerHTML = 0;

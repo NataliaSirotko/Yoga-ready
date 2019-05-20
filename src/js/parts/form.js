@@ -59,15 +59,18 @@ const form = () => {
                     .then(() => {
                         form.style.display = 'none';
                         img.style.display = "block";
-                        img.src = "/src/icons/ajax-loader.gif";
+                        img.src = "./src/icons/ajax-loader.gif";
                         img.style.margin = "30px 200px 0";
                     })
                     .then(() => {                   
-                        img.src = "/src/icons/herbal.png";
+                        img.src = "./src/icons/herbal.png";
                         img.style.width = "150px";
                     })
                     .catch(() => {
-                        img.src = "/src/icons/fish.psd";
+                        form.style.display = 'none';
+                        img.style.display = "block";
+                        img.style.margin = "30px 200px 0";
+                        img.src = "./src/icons/fish.psd";
                         img.style.width = "150px";
                     })
                     .then(clearInput)

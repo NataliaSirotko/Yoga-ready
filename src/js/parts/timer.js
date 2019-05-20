@@ -2,7 +2,9 @@ const timer = () => {
     let deadline = '2019-05-25';
 
     const getTimeRemaining = (endtime) => {
-        let t = Date.parse(endtime) - Date.parse(new Date()),
+        let d = new Date(),
+            region = d.getTime() - (d.getTimezoneOffset() *60000),
+            t = Date.parse(endtime) - Date.parse(new Date(region)),
             seconds = Math.floor((t/1000) % 60),
             minutes = Math.floor((t/1000/60)%60),
             hours = Math.floor((t/1000/60/60) % 24),
@@ -56,11 +58,11 @@ const timer = () => {
         const text = (num) => {
             let count = num % 10;
             if (count == 1) {
-                return num + ' день';
+                return `${num} день`;
             } if (count>1 && count <5) {
-                return num + ' дня';
+                return `${num} дня`;
             } else {
-                return num + ' дней';
+                return `${num} дней`;
             }
         };
     };

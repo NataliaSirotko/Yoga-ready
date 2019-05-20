@@ -1574,7 +1574,7 @@ var calc = function calc() {
   persons.addEventListener('input', function () {
     this.value = this.value.replace(/[e\+]/g, '').replace(/[^0-9]/g, '').replace(/^0/, '');
     personsSum = +this.value;
-    total = (daysSum + personsSum) * 4000;
+    total = (daysSum + personsSum) * 4000 * place.options[place.selectedIndex].value;
 
     if (restDays.value == '' || restDays.value == 0 || personsSum == 0) {
       totalValue.innerHTML = 0;
@@ -1586,7 +1586,7 @@ var calc = function calc() {
   restDays.addEventListener('input', function () {
     this.value = this.value.replace(/[e\+]/g, '').replace(/[^0-9]/g, '').replace(/^0/, '');
     daysSum = +this.value;
-    total = (daysSum + personsSum) * 4000;
+    total = (daysSum + personsSum) * 4000 * place.options[place.selectedIndex].value;
 
     if (persons.value == '' || persons.value == 0 || daysSum == 0) {
       totalValue.innerHTML = 0;
@@ -1682,13 +1682,16 @@ var form = function form() {
       postData(json).then(function () {
         form.style.display = 'none';
         img.style.display = "block";
-        img.src = "/src/icons/ajax-loader.gif";
+        img.src = "./src/icons/ajax-loader.gif";
         img.style.margin = "30px 200px 0";
       }).then(function () {
-        img.src = "/src/icons/herbal.png";
+        img.src = "./src/icons/herbal.png";
         img.style.width = "150px";
       }).catch(function () {
-        img.src = "/src/icons/fish.psd";
+        form.style.display = 'none';
+        img.style.display = "block";
+        img.style.margin = "30px 200px 0";
+        img.src = "./src/icons/fish.psd";
         img.style.width = "150px";
       }).then(clearInput);
       document.body.addEventListener('click', function (event) {
@@ -1959,7 +1962,9 @@ var timer = function timer() {
   var deadline = '2019-05-25';
 
   var getTimeRemaining = function getTimeRemaining(endtime) {
-    var t = Date.parse(endtime) - Date.parse(new Date()),
+    var d = new Date(),
+        region = d.getTime() - d.getTimezoneOffset() * 60000,
+        t = Date.parse(endtime) - Date.parse(new Date(region)),
         seconds = Math.floor(t / 1000 % 60),
         minutes = Math.floor(t / 1000 / 60 % 60),
         hours = Math.floor(t / 1000 / 60 / 60 % 24),
@@ -2010,13 +2015,13 @@ var timer = function timer() {
       var count = num % 10;
 
       if (count == 1) {
-        return num + ' день';
+        return "".concat(num, " \u0434\u0435\u043D\u044C");
       }
 
       if (count > 1 && count < 5) {
-        return num + ' дня';
+        return "".concat(num, " \u0434\u043D\u044F");
       } else {
-        return num + ' дней';
+        return "".concat(num, " \u0434\u043D\u0435\u0439");
       }
     };
   };
