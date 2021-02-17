@@ -37,7 +37,6 @@ const modal = () => {
             ],
                 {duration: 1500}); 
         };
-        
 
         if (window.screen.width < 500) {
             overlay.classList.remove('fade');
