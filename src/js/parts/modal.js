@@ -48,7 +48,7 @@ const modal = () => {
                     if (target.classList.contains('more') || target.classList.contains('description-btn'))  getAnimate();
                 });
             }
-        } 
+        }
 
     };
 
