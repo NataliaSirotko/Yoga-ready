@@ -23,6 +23,7 @@ const modal = () => {
         let isIe = /InternetExplorer/.test(navigator.userAgent),
             edge = /Edge/.test(navigator.userAgent);
 
+
         const getAnimate = () => {
             overlay.classList.remove('fade');
             overlay.animate([
