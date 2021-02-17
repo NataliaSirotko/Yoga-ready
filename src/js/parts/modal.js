@@ -51,6 +51,7 @@ const modal = () => {
     };
 
     getModal();
+    
 };
 
 module.exports = modal;
