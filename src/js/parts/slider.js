@@ -26,7 +26,7 @@ const slider = () => {
             width: '100%'},           
             {width: '80%'}
         ],
-            {duration: 2000});
+            {duration: 2000}); // fgfgdf
 
         dots[slideIndex - 1].classList.add('dot-active');
     };
