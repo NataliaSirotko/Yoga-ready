@@ -17,8 +17,8 @@
     "es6-promise": "^4.2.6",
     "formdata-polyfill": "^3.0.18",
     "nodelist-foreach-polyfill": "^1.2.0",
-    "webpack": "^4.31.0",
-    "webpack-cli": "^3.3.2"
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4"
